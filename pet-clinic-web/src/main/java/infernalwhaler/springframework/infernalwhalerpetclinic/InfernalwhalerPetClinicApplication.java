@@ -1,4 +1,4 @@
-package infernalwaler.springframework.infernalwhalerpetclinic;
+package infernalwhaler.springframework.infernalwhalerpetclinic;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
