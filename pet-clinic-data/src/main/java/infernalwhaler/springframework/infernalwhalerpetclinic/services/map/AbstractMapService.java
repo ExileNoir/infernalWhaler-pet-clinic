@@ -1,9 +1,8 @@
 package infernalwhaler.springframework.infernalwhalerpetclinic.services.map;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import infernalwhaler.springframework.infernalwhalerpetclinic.model.BaseEntity;
+
+import java.util.*;
 
 /**
  * @author ExileNoir
@@ -11,9 +10,9 @@ import java.util.Set;
  * @date 22/02/2021
  */
 
-public abstract class AbstractMapService<T, ID> {
+public abstract class AbstractMapService<T extends BaseEntity, ID extends Long> {
 
-    protected final Map<ID, T> map = new HashMap<>();
+    protected final Map<Long, T> map = new HashMap<>();
 
     Set<T> findAll() {
         return new HashSet<>(map.values());
@@ -23,8 +22,16 @@ public abstract class AbstractMapService<T, ID> {
         return map.get(id);
     }
 
-    T save(final ID id, final T object) {
-        return map.put(id, object);
+    T save(final T object) {
+        if (object != null) {
+            if (object.getId() == null) {
+                object.setId(getNextId());
+            }
+            map.put(object.getId(), object);
+        } else {
+            throw new RuntimeException("Object cannot be null");
+        }
+        return object;
     }
 
     void deleteById(final ID id) {
@@ -33,6 +40,17 @@ public abstract class AbstractMapService<T, ID> {
 
     void delete(final T object) {
         map.entrySet().removeIf(idtEntry -> idtEntry.getValue().equals(object));
+    }
+
+    private Long getNextId() {
+        Long nextId = null;
+
+        try {
+            nextId = Collections.max(map.keySet()) + 1;
+        } catch (NoSuchElementException e) {
+            nextId = 1L;
+        }
+        return nextId;
     }
 
 }
