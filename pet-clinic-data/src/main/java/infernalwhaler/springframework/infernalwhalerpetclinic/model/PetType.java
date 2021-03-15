@@ -6,7 +6,7 @@ package infernalwhaler.springframework.infernalwhalerpetclinic.model;
  * @date 16/02/2021
  */
 
-public class PetType {
+public class PetType extends BaseEntity {
 
     private String name;
 
